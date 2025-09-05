@@ -2310,6 +2310,22 @@ class TestDataArray:
                 )
                 np.testing.assert_allclose(actual.values, expected)
 
+    def test_quantile_keep_attrs(self):
+        # Test dropped attrs (default behavior)
+        q_result = self.va.quantile(0.5, dim="x")
+        assert len(q_result.attrs) == 0
+        assert q_result.attrs == OrderedDict()
+
+        # Test kept attrs
+        q_result = self.va.quantile(0.5, dim="x", keep_attrs=True)
+        assert len(q_result.attrs) == len(self.attrs)
+        assert q_result.attrs == self.attrs
+
+        # Test explicit False
+        q_result = self.va.quantile(0.5, dim="x", keep_attrs=False)
+        assert len(q_result.attrs) == 0
+        assert q_result.attrs == OrderedDict()
+
     def test_reduce_keep_attrs(self):
         # Test dropped attrs
         vm = self.va.mean()
