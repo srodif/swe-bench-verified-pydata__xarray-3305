@@ -8,7 +8,7 @@ from typing import Any, Hashable, Mapping, Union
 import numpy as np
 import pandas as pd
 
-import xarray as xr  # only for Dataset and DataArray
+import xarray as xr  # only for Dataset and DataArray.
 
 from . import arithmetic, common, dtypes, duck_array_ops, indexing, nputils, ops, utils
 from .indexing import (
