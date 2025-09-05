@@ -1488,6 +1488,23 @@ class TestVariable(VariableSubclassobjects):
                 expected = np.nanpercentile(self.d, np.array(q) * 100, axis=axis)
                 np.testing.assert_allclose(actual.values, expected)
 
+    def test_quantile_keep_attrs(self):
+        # Test attributes handling in Variable.quantile
+        attrs = OrderedDict([('units', 'K'), ('standard_name', 'temperature')])
+        v = Variable(["x", "y"], self.d, attrs=attrs)
+        
+        # Test default behavior (should not keep attrs)
+        result = v.quantile(0.5, dim="x")
+        assert result.attrs == {}
+        
+        # Test keep_attrs=False
+        result = v.quantile(0.5, dim="x", keep_attrs=False)
+        assert result.attrs == {}
+        
+        # Test keep_attrs=True
+        result = v.quantile(0.5, dim="x", keep_attrs=True)
+        assert result.attrs == attrs
+
     @requires_dask
     def test_quantile_dask_raises(self):
         # regression for GH1524
